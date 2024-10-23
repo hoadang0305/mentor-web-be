@@ -21,6 +21,7 @@ func NewStudentHandler(studentService service.StudentService) *StudentHandler {
 // @Router /api/v1/students [get]
 // @Success 200 {object} []model.Student
 func (handler *StudentHandler) GetAll(c *gin.Context) {
+	print(123)
 	students := handler.studentService.GetAllStudent(c.Request.Context())
 	c.JSON(200, students)
 }
