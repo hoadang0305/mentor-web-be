@@ -12,3 +12,7 @@ http://localhost:PORT/swagger/index.html
 ```bash
 $ make wire
 ```
+### ReInstall all library
+```bash
+$ go mod tidy
+```

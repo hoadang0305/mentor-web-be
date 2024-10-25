@@ -8,7 +8,7 @@ import (
 
 func registerDependencies() *controller.ApiContainer {
 	// Open database connection
-	db := database.Open()
+	db := database.ConnectDB()
 
 	return internal.InitializeContainer(db)
 }

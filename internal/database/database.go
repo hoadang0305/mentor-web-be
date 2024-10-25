@@ -1,36 +1,39 @@
 package database
 
 import (
+	"context"
 	"fmt"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"log"
 	"os"
-
-	_ "github.com/go-sql-driver/mysql"
-	"github.com/jmoiron/sqlx"
-	_ "github.com/joho/godotenv/autoload"
+	"time"
 )
 
 var (
-	dbname   = os.Getenv("DB_DATABASE")
-	password = os.Getenv("DB_PASSWORD")
-	username = os.Getenv("DB_USERNAME")
-	port     = os.Getenv("DB_PORT")
-	host     = os.Getenv("DB_HOST")
+	dburi = os.Getenv("DB_URI")
 )
 
-type Db *sqlx.DB
+type Db *mongo.Client
 
-func Open() *sqlx.DB {
+func ConnectDB() *mongo.Client {
 	// Opening a driver typically will not attempt to connect to the database.
-	db, err := sqlx.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s", username, password, host, port, dbname))
+	client, err := mongo.Connect(options.Client().ApplyURI(dburi))
 	if err != nil {
-		// This will not be a connection error, but a DSN parse error or
-		// another initialization error.
 		log.Fatal(err)
 	}
-	db.SetConnMaxLifetime(0)
-	db.SetMaxIdleConns(50)
-	db.SetMaxOpenConns(50)
+	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
+	//ping the database
+	err = client.Ping(ctx, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Connected to MongoDB")
+	return client
+}
 
-	return db
+// getting database collections
+func GetCollection(client *mongo.Client, collectionName string) *mongo.Collection {
+	collection := client.Database("MentorDB").Collection(collectionName)
+	return collection
 }

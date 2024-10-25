@@ -1,6 +1,3 @@
-//go:build wireinject
-// +build wireinject
-
 package internal
 
 import (
@@ -24,20 +21,18 @@ var serverSet = wire.NewSet(
 
 // handler === controller | with service and repository layers to form 3 layers architecture
 var handlerSet = wire.NewSet(
-	v1.NewStudentHandler,
+	v1.NewUserHandler,
 )
 
 var serviceSet = wire.NewSet(
-	serviceimplement.NewStudentService,
+	serviceimplement.NewUserService,
 )
 
 var repositorySet = wire.NewSet(
-	repositoryimplement.NewStudentRepository,
+	repositoryimplement.NewUserRepository,
 )
 
-func InitializeContainer(
-	db database.Db,
-) *controller.ApiContainer {
+func InitializeContainer(db database.Db) *controller.ApiContainer {
 	wire.Build(serverSet, handlerSet, serviceSet, repositorySet, container)
 	return &controller.ApiContainer{}
 }
