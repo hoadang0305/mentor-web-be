@@ -15,24 +15,53 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/students": {
+        "/api/v1/user": {
             "get": {
-                "description": "Get all students",
+                "description": "Get all users",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Student"
+                    "Users"
                 ],
-                "summary": "Get all students",
+                "summary": "Get all users",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/model.Student"
+                                "$ref": "#/definitions/entity.User"
                             }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add new users",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Add new users",
+                "parameters": [
+                    {
+                        "description": "User payload",
+                        "name": "params",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entity.User"
                         }
                     }
                 }
@@ -40,11 +69,43 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "model.Student": {
+        "entity.User": {
             "type": "object",
             "properties": {
+                "_id": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
+                },
+                "role": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.UserRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "name",
+                "role"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 1
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 1
+                },
+                "role": {
+                    "type": "integer"
                 }
             }
         }

@@ -22,3 +22,12 @@ func (repo UserRepository) GetAllUser(c context.Context) []entity.User {
 		{Name: "Khoa"},
 	}
 }
+
+func (repo UserRepository) AddNewUser(c context.Context, user *entity.User) error {
+	userCollection := database.GetCollection(repo.db, "users")
+	_, err := userCollection.InsertOne(c, user)
+	if err != nil {
+		return err
+	}
+	return nil
+}

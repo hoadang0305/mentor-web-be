@@ -12,6 +12,7 @@ func MapRoutes(router *gin.Engine, userHandler *UserHandler) {
 		users := v1.Group("/users")
 		{
 			users.GET("/", userHandler.GetAll)
+			users.POST("/", userHandler.Add)
 		}
 	}
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

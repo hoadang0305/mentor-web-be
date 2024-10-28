@@ -7,4 +7,5 @@ import (
 
 type UserRepository interface {
 	GetAllUser(c context.Context) []entity.User
+	AddNewUser(c context.Context, user *entity.User) error
 }

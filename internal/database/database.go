@@ -3,7 +3,7 @@ package database
 import (
 	"context"
 	"fmt"
-	"github.com/joho/godotenv"
+	_ "github.com/joho/godotenv/autoload"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"log"
@@ -11,14 +11,11 @@ import (
 	"time"
 )
 
+var DbUri = os.Getenv("DB_URI")
+
 type Db *mongo.Client
 
 func ConnectDB() *mongo.Client {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal(err)
-	}
-	DbUri := os.Getenv("DB_URI")
 	// Opening a driver typically will not attempt to connect to the database.
 	client, err := mongo.Connect(options.Client().ApplyURI(DbUri))
 	if err != nil {

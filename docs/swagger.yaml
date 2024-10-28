@@ -1,15 +1,38 @@
 definitions:
-  model.Student:
+  entity.User:
     properties:
+      _id:
+        type: string
+      email:
+        type: string
       name:
         type: string
+      role:
+        type: integer
+    type: object
+  model.UserRequest:
+    properties:
+      email:
+        maxLength: 255
+        minLength: 1
+        type: string
+      name:
+        maxLength: 255
+        minLength: 1
+        type: string
+      role:
+        type: integer
+    required:
+    - email
+    - name
+    - role
     type: object
 info:
   contact: {}
 paths:
-  /api/v1/students:
+  /api/v1/user:
     get:
-      description: Get all students
+      description: Get all users
       produces:
       - application/json
       responses:
@@ -17,9 +40,28 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/model.Student'
+              $ref: '#/definitions/entity.User'
             type: array
-      summary: Get all students
+      summary: Get all users
       tags:
-      - Student
+      - Users
+    post:
+      description: Add new users
+      parameters:
+      - description: User payload
+        in: body
+        name: params
+        required: true
+        schema:
+          $ref: '#/definitions/model.UserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entity.User'
+      summary: Add new users
+      tags:
+      - Users
 swagger: "2.0"
