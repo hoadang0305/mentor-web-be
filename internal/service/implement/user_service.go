@@ -17,16 +17,8 @@ func NewUserService(userRepository repository.UserRepository) service.UserServic
 	return &UserService{userRepository: userRepository}
 }
 
-func (service UserService) GetAllUser(ctx context.Context) []entity.User {
-	usersFromRepo := service.userRepository.GetAllUser(ctx)
-
-	users := make([]entity.User, len(usersFromRepo))
-	for i, s := range usersFromRepo {
-		users[i] = entity.User{
-			Name: s.Name,
-		}
-	}
-	return users
+func (service UserService) GetAllUser(ctx context.Context) ([]entity.User, error) {
+	return service.userRepository.GetAllUser(ctx)
 }
 
 func (service UserService) CreateUser(ctx context.Context, userRequest model.UserRequest) (*entity.User, error) {

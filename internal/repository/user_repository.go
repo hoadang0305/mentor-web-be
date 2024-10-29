@@ -6,6 +6,6 @@ import (
 )
 
 type UserRepository interface {
-	GetAllUser(c context.Context) []entity.User
+	GetAllUser(c context.Context) ([]entity.User, error)
 	AddNewUser(c context.Context, user *entity.User) error
 }

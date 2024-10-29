@@ -7,6 +7,6 @@ import (
 )
 
 type UserService interface {
-	GetAllUser(ctx context.Context) []entity.User
+	GetAllUser(ctx context.Context) ([]entity.User, error)
 	CreateUser(ctx context.Context, userRequest model.UserRequest) (*entity.User, error)
 }

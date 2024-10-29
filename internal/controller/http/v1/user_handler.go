@@ -26,8 +26,13 @@ func NewUserHandler(userService service.UserService) *UserHandler {
 // @Router /api/v1/user [get]
 // @Success 200 {object} []entity.User
 func (handler *UserHandler) GetAll(c *gin.Context) {
-	users := handler.userService.GetAllUser(c.Request.Context())
-	c.JSON(200, users)
+	users, err := handler.userService.GetAllUser(c.Request.Context())
+	if err != nil {
+		c.JSON(http.StatusBadRequest, http_common.NewErrorResponse(http_common.Error{
+			Message: err.Error(), Field: "", Code: http_common.ErrorResponseCode.InternalServerError,
+		}))
+	}
+	c.JSON(http.StatusOK, http_common.NewSuccessResponse[[]entity.User](&users))
 }
 
 // @BasePath /api/v1
@@ -35,7 +40,7 @@ func (handler *UserHandler) GetAll(c *gin.Context) {
 // @Description Add new users
 // @Tags Users
 // @Produce  json
-// @Param params body model.UserRequest true "User payload"
+// @Param params body model.UserRequest true "Userpayload"
 // @Router /api/v1/user [post]
 // @Success 200 {object} entity.User
 func (handler *UserHandler) Add(c *gin.Context) {
